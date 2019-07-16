@@ -23,6 +23,17 @@ const smallColumn = {
   width: "10%"
 }
 
+/*
+function withFeature(Component) {
+  return function (props) {
+    return <Component {...props} />
+  }
+}
+
+const withEnhancement = (Component) => (props) =>
+  <Component {...props} />
+*/
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -132,18 +143,15 @@ class App extends Component {
             <p>Something went wrong.</p>
           </div>
         ) : (
-          <Table list={list} onDismiss={this.onDismiss} />
-        )}
-        <div className="interactions">
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <Button
-              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
-            >
-              More
-            </Button>
+            <Table list={list} onDismiss={this.onDismiss} />
           )}
+        <div className="interactions">
+          <ButtonWithLoading
+            isLoading={isLoading}
+            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
+          >
+            More
+          </ButtonWithLoading>
         </div>
       </div>
     )
@@ -234,6 +242,13 @@ Button.propTypes = {
 Button.defaultProps = {
   className: ""
 }
+
+const withLoading = (Component) => ({ isLoading, ...rest }) =>
+  isLoading
+    ? <Loading />
+    : <Component {...rest} />
+
+const ButtonWithLoading = withLoading(Button)
 
 export default App
 
